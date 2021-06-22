@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Zoom-Android-POC</string>
+    <string name="okay">Okay</string>
+    <string name="password">Password</string>
+
+    <string name="demoQuestion">How was your day?</string>
+</resources>

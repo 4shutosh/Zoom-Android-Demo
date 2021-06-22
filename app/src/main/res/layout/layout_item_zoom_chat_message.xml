@@ -1,0 +1,49 @@
+<layout xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewState"
+            type="us.zoom.sdk.InMeetingChatMessage" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginVertical="5dp"
+        android:background="@drawable/dr_rounded_rectangle_16"
+        android:backgroundTint="@color/zm_grey_text"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/message_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="User" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/message_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:text="@{viewState.content}"
+            android:textSize="14sp"
+            tools:text="Hello, How are you all?" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/message_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginHorizontal="10dp"
+            android:text="@{String.valueOf(viewState.time)}"
+            android:textSize="12sp"
+            tools:text="12334" />
+
+    </LinearLayout>
+</layout>

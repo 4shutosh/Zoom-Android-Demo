@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/startFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.poc.zoom.MainFragment"
+        android:label="MainFragment"
+        tools:layout="@layout/fragment_main">
+        <argument
+            android:name="meetingNumber"
+            app:argType="string" />
+        <argument
+            android:name="userName"
+            android:defaultValue="User"
+            app:argType="string" />
+        <action
+            android:id="@+id/to_questionDialogFragment"
+            app:destination="@id/questionDialogFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="com.poc.zoom.start.StartFragment"
+        android:label="StartFragment"
+        tools:layout="@layout/fragment_start">
+        <action
+            android:id="@+id/action_startFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/questionDialogFragment"
+        android:name="com.poc.zoom.question.QuestionDialogFragment"
+        android:label="QuestionDialogFragment"
+        tools:layout="@layout/layout_dialog_question">
+        <argument
+            android:name="userName"
+            app:argType="string" />
+        <argument
+            android:name="questionData"
+            app:argType="com.poc.zoom.viewState.QuestionViewState" />
+    </dialog>
+</navigation>
