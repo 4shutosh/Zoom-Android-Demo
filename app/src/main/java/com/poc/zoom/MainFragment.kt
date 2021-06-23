@@ -207,6 +207,10 @@ class MainFragment : Fragment(R.layout.fragment_main),
         chatAdapter.notifyDataSetChanged()
     }
 
+    override fun breakOutSession(iboAttendee: IBOAttendee) {
+        iboAttendee.joinBo()
+    }
+
     private fun changeVideoLayout(videoType: Int) {
 //        if (videoType == )
     }

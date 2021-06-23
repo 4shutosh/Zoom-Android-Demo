@@ -24,6 +24,7 @@ class ZoomMeetingUserCallback : BaseCallback<ZoomMeetingUserCallback.ZoomBaseMee
         fun onHostAskMicUnMute()
         fun onHostAskVideoUnMute()
         fun onReceiveChatMessage(receivedMessage: InMeetingChatMessage)
+        fun breakOutSession(iboAttendee: IBOAttendee)
     }
 
     private var zoomSDKInstance: ZoomSDK = ZoomSDK.getInstance()
@@ -40,6 +41,53 @@ class ZoomMeetingUserCallback : BaseCallback<ZoomMeetingUserCallback.ZoomBaseMee
         commonListener()
         serviceListener()
         shareListener()
+        roomListener()
+    }
+
+    private fun roomListener() {
+        val inMeetingBOControllerListener = object : InMeetingBOControllerListener {
+            override fun onHasCreatorRightsNotification(p0: IBOCreator?) {
+            }
+
+            override fun onHasAdminRightsNotification(p0: IBOAdmin?) {
+            }
+
+            override fun onHasAssistantRightsNotification(p0: IBOAssistant?) {
+            }
+
+            override fun onHasAttendeeRightsNotification(iboAttendee: IBOAttendee?) {
+                for (event in callbacks) {
+                    iboAttendee?.let {
+                        event.breakOutSession(it)
+                    }
+                }
+            }
+
+            override fun onHasDataHelperRightsNotification(p0: IBOData?) {
+            }
+
+            override fun onLostCreatorRightsNotification() {
+            }
+
+            override fun onLostAdminRightsNotification() {
+            }
+
+            override fun onLostAssistantRightsNotification() {
+            }
+
+            override fun onLostAttendeeRightsNotification() {
+            }
+
+            override fun onLostDataHelperRightsNotification() {
+            }
+
+            override fun onNewBroadcastMessageReceived(p0: String?) {
+            }
+
+        }
+        zoomSDKInstance.inMeetingService.inMeetingBOController.addListener(
+            inMeetingBOControllerListener
+        )
     }
 
     private fun commonListener() {
