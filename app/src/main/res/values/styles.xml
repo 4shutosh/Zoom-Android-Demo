@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="InMeetingBottomWebViewClientStyle" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="behavior_draggable">false</item>
+    </style></resources>

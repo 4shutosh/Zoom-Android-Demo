@@ -20,6 +20,9 @@
         <action
             android:id="@+id/to_questionDialogFragment"
             app:destination="@id/questionDialogFragment" />
+        <action
+            android:id="@+id/to_inMeetingWebViewFragment"
+            app:destination="@id/inMeetingWebViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/startFragment"
@@ -41,5 +44,14 @@
         <argument
             android:name="questionData"
             app:argType="com.poc.zoom.viewState.QuestionViewState" />
+    </dialog>
+    <dialog
+        android:id="@+id/inMeetingWebViewFragment"
+        android:name="com.poc.zoom.webview.InMeetingWebViewFragment"
+        android:label="InMeetingWebViewFragment" >
+        <argument
+            android:name="url"
+            app:argType="string"
+            android:defaultValue="https://www.google.com/" />
     </dialog>
 </navigation>

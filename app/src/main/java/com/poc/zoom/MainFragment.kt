@@ -17,7 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.poc.zoom.adapter.ChatAdapter
 import com.poc.zoom.databinding.FragmentMainBinding
-import com.poc.zoom.ui.ChatIconClickListener
+import com.poc.zoom.ui.MeetingOptionsChatClickListener
 import com.poc.zoom.ui.MeetingVideoView
 import com.poc.zoom.utils.AnimationHelper.enterToRight
 import com.poc.zoom.utils.AnimationHelper.exitToLeft
@@ -76,7 +76,7 @@ class MainFragment : Fragment(R.layout.fragment_main),
         binding.fragmentMainChatLayout.chatLayoutRecyclerView.adapter = chatAdapter
         chatAdapter.submitList(chatList)
 
-        val chatIconClickListener = object : ChatIconClickListener {
+        val chatIconClickListener = object : MeetingOptionsChatClickListener {
             // add animation here
             override fun onChatIconClick() {
                 if (binding.fragmentMainChatLayout.root.isVisible) {
@@ -84,6 +84,12 @@ class MainFragment : Fragment(R.layout.fragment_main),
                 } else {
                     binding.fragmentMainChatLayout.root.enterToRight()
                 }
+            }
+
+            override fun onWebIconClick() {
+                findNavController().navigate(MainFragmentDirections.toInMeetingWebViewFragment(
+                    url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                ))
             }
         }
         binding.fragmentMainMeetingOptions.setChatIconClickListener(chatIconClickListener)

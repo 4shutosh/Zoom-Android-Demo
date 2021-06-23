@@ -14,12 +14,12 @@
             android:layout_marginBottom="10dp"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            app:tint="@color/zm_red"
             android:focusable="true"
             android:padding="10dp"
             android:src="@drawable/dr_camera_icon"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:tint="@color/zm_red" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/meeting_options_chat"
@@ -32,8 +32,8 @@
             android:focusable="true"
             android:padding="10dp"
             android:src="@drawable/dr_chat_icon"
-            app:layout_constraintEnd_toStartOf="@id/meeting_options_mic"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/meeting_options_mic"
             app:tint="@color/zm_red" />
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -44,12 +44,27 @@
             android:layout_marginBottom="10dp"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            app:tint="@color/zm_red"
             android:focusable="true"
             android:padding="10dp"
             android:src="@drawable/dr_mic_icon"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/zm_red" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/meeting_options_web"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginBottom="10dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_baseline_web"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/meeting_options_video"
+            app:tint="@color/zm_red" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

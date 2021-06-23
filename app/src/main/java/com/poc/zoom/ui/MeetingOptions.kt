@@ -16,9 +16,9 @@ class MeetingOptions @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attributeSet, defStyleAttr) {
 
-    private lateinit var chatIconClickListener: ChatIconClickListener
-
     private var binding: LayoutMeetingOptionsBinding
+
+    private lateinit var meetingOptionsChatClickListener: MeetingOptionsChatClickListener
 
     private var zoomSDKInstance: ZoomSDK
     private val inMeetingAudioController: InMeetingAudioController
@@ -47,9 +47,14 @@ class MeetingOptions @JvmOverloads constructor(
             switchVideo()
         }
         binding.meetingOptionsChat.setOnClickListener {
-            if (this::chatIconClickListener.isInitialized) {
-                chatIconClickListener.onChatIconClick()
+            if (this::meetingOptionsChatClickListener.isInitialized) {
+                meetingOptionsChatClickListener.onChatIconClick()
                 switchChatIcon()
+            }
+        }
+        binding.meetingOptionsWeb.setOnClickListener {
+            if (this::meetingOptionsChatClickListener.isInitialized) {
+                meetingOptionsChatClickListener.onWebIconClick()
             }
         }
     }
@@ -88,12 +93,17 @@ class MeetingOptions @JvmOverloads constructor(
         binding.meetingOptionsChat.isActivated = !binding.meetingOptionsChat.isActivated
     }
 
-    fun setChatIconClickListener(listener: ChatIconClickListener) {
-        chatIconClickListener = listener
+    fun setChatIconClickListener(listener: MeetingOptionsChatClickListener) {
+        meetingOptionsChatClickListener = listener
+    }
+
+    fun setWebIconClickListener(listener: MeetingOptionsChatClickListener) {
+        meetingOptionsChatClickListener = listener
     }
 
 }
 
-interface ChatIconClickListener {
+interface MeetingOptionsChatClickListener {
     fun onChatIconClick()
+    fun onWebIconClick()
 }
