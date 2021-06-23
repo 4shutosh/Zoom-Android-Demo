@@ -1,9 +1,11 @@
 package com.poc.zoom.webview
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -54,6 +56,21 @@ class InMeetingWebViewFragment : BottomSheetDialogFragment() {
             view?.measuredHeight?.let { bottomSheetBehavior?.setPeekHeight(it) }
         }
 
+        binding.layoutInMeetingWebviewUrl.setText(args.url)
+
+        binding.layoutInMeetingWebviewSearch.setOnClickListener {
+            val url = binding.layoutInMeetingWebviewUrl.text.toString()
+            if (url.isNotEmpty()) {
+                binding.layoutInMeetingWebviewUrl.clearFocus()
+                binding.layoutInMeetingWeb.loadUrl(url)
+                view?.let {
+                    val imm =
+                        requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(view?.windowToken, 0)
+                }
+            }
+        }
+
         binding.layoutInMeetingWebviewClose.setOnClickListener {
             dismiss()
         }
@@ -69,6 +86,12 @@ class InMeetingWebViewFragment : BottomSheetDialogFragment() {
                     if (newProgress == 100) {
                         binding.layoutInMeetingWebviewProgress.visibility = View.GONE
                     }
+                }
+            }
+            webViewClient = object : WebViewClient() {
+                override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                    binding.layoutInMeetingWebviewUrl.setText(url)
+                    return super.shouldOverrideUrlLoading(view, url)
                 }
             }
             loadUrl(args.url)
