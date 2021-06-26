@@ -4,15 +4,22 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.navigation.Navigation.findNavController
 import com.poc.zoom.databinding.ActivityMainBinding
+import com.poc.zoom.utils.ActivityNavigationDispatchers
+import com.poc.zoom.utils.observeEvent
 import dagger.hilt.android.AndroidEntryPoint
 import us.zoom.sdk.ZoomError
 import us.zoom.sdk.ZoomSDK
 import us.zoom.sdk.ZoomSDKInitParams
 import us.zoom.sdk.ZoomSDKInitializeListener
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), ZoomSDKInitializeListener {
+
+    @Inject
+    lateinit var navigationDispatchers: ActivityNavigationDispatchers
 
     private lateinit var binding: ActivityMainBinding
 
@@ -23,6 +30,13 @@ class MainActivity : AppCompatActivity(), ZoomSDKInitializeListener {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         initSDK()
+        setupView()
+    }
+
+    private fun setupView() {
+        navigationDispatchers.navigationCommand.observeEvent(this) {
+            it.invoke(findNavController(this@MainActivity, R.id.activity_main_fragment_host))
+        }
     }
 
     private fun initSDK() {
