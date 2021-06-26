@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.poc.zoom.MainFragmentDirections
+import com.poc.zoom.utils.ActivityNavigationDispatchers
 import com.poc.zoom.utils.toLiveData
 import com.poc.zoom.viewState.QuestionViewState
 import com.poc.zoom.zoomhelper.ZoomMeetingUiSettingHelper
@@ -23,7 +25,8 @@ import javax.inject.Inject
 class MainFragmentViewModel @Inject constructor(
     private val zoomSDKInstance: ZoomSDK,
     private val meetingService: MeetingService,
-    private val inMeetingService: InMeetingService
+    private val inMeetingService: InMeetingService,
+    private val navigationDispatchers: ActivityNavigationDispatchers
 ) : ViewModel() {
 
     private var _meetingLayoutType = MutableLiveData<Int>()
@@ -41,6 +44,7 @@ class MainFragmentViewModel @Inject constructor(
 
     private fun initiateZoom() {
         zoomSDKInstance.meetingSettingsHelper.isCustomizedMeetingUIEnabled = true
+        zoomSDKInstance.inMeetingService.inMeetingInterpretationController.sta
     }
 
     // recheck context as a parameter
@@ -85,7 +89,6 @@ class MainFragmentViewModel @Inject constructor(
     fun startQuestionFeature(meetingNumber: Long) {
 
         val database = Firebase.firestore
-
         // make a child of meetingNumber in database
         database.collection("Questions")
             .document(meetingNumber.toString()).collection("questions")
@@ -124,6 +127,27 @@ class MainFragmentViewModel @Inject constructor(
                     }
                 }
             }
+    }
+
+    fun actionQuestionButtonAction(userName: String, question: QuestionViewState) {
+        navigationDispatchers.emit {
+            it.navigate(
+                MainFragmentDirections.toQuestionDialogFragment(
+                    userName,
+                    question
+                )
+            )
+        }
+    }
+
+    fun actionWebIconClick() {
+        navigationDispatchers.emit {
+            it.navigate(
+                MainFragmentDirections.toInMeetingWebViewFragment(
+                    url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                )
+            )
+        }
     }
 
     companion object {

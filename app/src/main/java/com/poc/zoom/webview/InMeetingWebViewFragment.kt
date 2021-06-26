@@ -1,14 +1,17 @@
 package com.poc.zoom.webview
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.annotation.RequiresApi
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -81,10 +84,16 @@ class InMeetingWebViewFragment : BottomSheetDialogFragment() {
         binding.layoutInMeetingWeb.apply {
             webViewClient = WebViewClient()
             settings.javaScriptEnabled = true
+            settings.useWideViewPort = true
+            settings.allowContentAccess = true
+            settings.loadWithOverviewMode = true
+            settings.domStorageEnabled = true
             webChromeClient = object : WebChromeClient() {
                 override fun onProgressChanged(view: WebView?, newProgress: Int) {
                     if (newProgress == 100) {
                         binding.layoutInMeetingWebviewProgress.visibility = View.GONE
+                    } else {
+                        binding.layoutInMeetingWebviewProgress.visibility = View.VISIBLE
                     }
                 }
             }
@@ -92,6 +101,15 @@ class InMeetingWebViewFragment : BottomSheetDialogFragment() {
                 override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                     binding.layoutInMeetingWebviewUrl.setText(url)
                     return super.shouldOverrideUrlLoading(view, url)
+                }
+
+                @RequiresApi(Build.VERSION_CODES.N)
+                override fun shouldOverrideUrlLoading(
+                    view: WebView?,
+                    request: WebResourceRequest?
+                ): Boolean {
+                    binding.layoutInMeetingWebviewUrl.setText(request?.url.toString())
+                    return super.shouldOverrideUrlLoading(view, request)
                 }
             }
             loadUrl(args.url)

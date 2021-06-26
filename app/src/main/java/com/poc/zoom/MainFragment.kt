@@ -13,7 +13,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.poc.zoom.adapter.ChatAdapter
 import com.poc.zoom.databinding.FragmentMainBinding
@@ -87,9 +86,7 @@ class MainFragment : Fragment(R.layout.fragment_main),
             }
 
             override fun onWebIconClick() {
-                findNavController().navigate(MainFragmentDirections.toInMeetingWebViewFragment(
-                    url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-                ))
+                viewModel.actionWebIconClick()
             }
         }
         binding.fragmentMainMeetingOptions.setChatIconClickListener(chatIconClickListener)
@@ -129,11 +126,9 @@ class MainFragment : Fragment(R.layout.fragment_main),
         view?.let {
             viewModel.questionViewState.observe(viewLifecycleOwner) { question ->
                 binding.fragmentMainQuestionButton.setOnClickListener {
-                    findNavController().navigate(
-                        MainFragmentDirections.toQuestionDialogFragment(
-                            args.userName,
-                            question
-                        )
+                    viewModel.actionQuestionButtonAction(
+                        args.userName,
+                        question
                     )
                 }
             }

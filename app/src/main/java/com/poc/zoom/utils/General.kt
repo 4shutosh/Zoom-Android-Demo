@@ -27,3 +27,8 @@ fun EditText.onRightDrawableClicked(onClicked: (view: EditText) -> Unit) {
         hasConsumed
     }
 }
+
+@Suppress("UNCHECKED_CAST")
+fun <T> Any.toEvent(): Event<T> {
+    return Event(this as T)
+}
