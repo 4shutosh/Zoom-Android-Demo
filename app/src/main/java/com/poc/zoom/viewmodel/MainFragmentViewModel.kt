@@ -44,7 +44,7 @@ class MainFragmentViewModel @Inject constructor(
 
     private fun initiateZoom() {
         zoomSDKInstance.meetingSettingsHelper.isCustomizedMeetingUIEnabled = true
-        zoomSDKInstance.inMeetingService.inMeetingInterpretationController.sta
+//        zoomSDKInstance.inMeetingService.inMeetingInterpretationController.sta
     }
 
     // recheck context as a parameter

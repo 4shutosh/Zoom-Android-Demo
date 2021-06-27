@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -33,6 +34,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import us.zoom.sdk.*
 import javax.inject.Inject
+
 
 // inflate the video view once the sdk is ready to show the video or else it will crash
 // todo : Need to create layouts for each screen meeting type : Video, ShareScreen, updateUserVideo listener
@@ -67,7 +69,18 @@ class MainFragment : Fragment(R.layout.fragment_main),
         initLiveData()
     }
 
+    override fun onResume() {
+        super.onResume()
+        checkForZoomLayouts()
+    }
+
+    private fun checkForZoomLayouts() {
+//        initializeVideoView()
+    }
+
     private fun setUpView() {
+        activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
         binding.viewModel = this.viewModel
         checkPermissions()
 
@@ -267,6 +280,8 @@ class MainFragment : Fragment(R.layout.fragment_main),
             removeLayout(currentVideoLayoutType)
             currentVideoLayoutType = videoLayoutType
             addLayout(videoLayoutType)
+        } else {
+            Log.d(TAG, "initializeVideoView: reached same layout")
         }
         showCurrentUserVideoLayout()
         questionFeature()
@@ -283,6 +298,7 @@ class MainFragment : Fragment(R.layout.fragment_main),
             LAYOUT_TYPE_IN_WAIT_ROOM -> {
             }
             LAYOUT_TYPE_OTHER_SHARE -> {
+                Log.d(TAG, "addLayout: type share")
                 showShareViewVideoLayout()
             }
             else -> {
@@ -340,11 +356,14 @@ class MainFragment : Fragment(R.layout.fragment_main),
 
         val activeRenderInfo = MobileRTCVideoUnitRenderInfo(0, 0, 100, 100)
         defaultVideoManager.removeAllVideoUnits()
-
         val usersIdList = zoomSDKInstance.inMeetingService.inMeetingUserList
-        Log.d(TAG, "showActiveVideoLayout: $usersIdList")
-        defaultVideoManager.addAttendeeVideoUnit(usersIdList.last(), activeRenderInfo)
-
+        for (user in usersIdList) {
+            if (zoomSDKInstance.inMeetingService.isHostUser(user)) {
+                Log.d(TAG, "showActiveVideoLayout: userFound")
+                defaultVideoManager.addAttendeeVideoUnit(user, activeRenderInfo)
+                break
+            }
+        }
     }
 
     private fun showShareViewVideoLayout() {
