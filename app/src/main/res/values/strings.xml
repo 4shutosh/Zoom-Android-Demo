@@ -4,4 +4,8 @@
     <string name="password">Password</string>
 
     <string name="demoQuestion">How was your day?</string>
+    <string name="exit_meeting">Are you Sure? This will leave the meeting</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="leave">Leave</string>
+    <string name="cancel">Cancel</string>
 </resources>

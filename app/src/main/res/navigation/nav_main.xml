@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.poc.zoom.MainFragment"
+        android:name="com.poc.zoom.inmeeting.MainFragment"
         android:label="MainFragment"
         tools:layout="@layout/fragment_main">
         <argument
@@ -35,7 +35,7 @@
     </fragment>
     <dialog
         android:id="@+id/questionDialogFragment"
-        android:name="com.poc.zoom.question.QuestionDialogFragment"
+        android:name="com.poc.zoom.inmeeting.question.QuestionDialogFragment"
         android:label="QuestionDialogFragment"
         tools:layout="@layout/layout_dialog_question">
         <argument

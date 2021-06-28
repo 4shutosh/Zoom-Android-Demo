@@ -1,4 +1,4 @@
-package com.poc.zoom.zoomhelper
+package com.poc.zoom.inmeeting.zoomhelper
 
 object ZoomHelper {
 

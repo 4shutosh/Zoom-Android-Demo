@@ -1,4 +1,4 @@
-package com.poc.zoom.zoomhelper
+package com.poc.zoom.inmeeting.zoomhelper
 
 import android.view.SurfaceHolder
 import com.poc.zoom.utils.BaseCallback

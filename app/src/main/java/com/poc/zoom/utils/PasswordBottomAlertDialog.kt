@@ -2,11 +2,11 @@ package com.poc.zoom.utils
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.widget.Button
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.button.MaterialButton
 import com.poc.zoom.databinding.LayoutBottomSheetPasswordBinding
 
-class BottomAlertDialog constructor(
+class PasswordBottomAlertDialog constructor(
     mContext: Context,
     title: String,
     body: String,
@@ -15,7 +15,7 @@ class BottomAlertDialog constructor(
 
     private var binding: LayoutBottomSheetPasswordBinding =
         LayoutBottomSheetPasswordBinding.inflate(LayoutInflater.from(context))
-    var positiveButton: Button
+    var positiveButton: MaterialButton
 
     init {
         val titleTv = binding.alertHeading
@@ -26,6 +26,7 @@ class BottomAlertDialog constructor(
         bodyTv.text = body
         positiveButton.text = positiveButtonText
         setContentView(binding.root)
+        setCancelable(false)
     }
 
     fun getPassword(): String {

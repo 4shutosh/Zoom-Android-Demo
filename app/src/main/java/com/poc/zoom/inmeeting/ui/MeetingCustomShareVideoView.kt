@@ -1,22 +1,22 @@
-package com.poc.zoom.ui
+package com.poc.zoom.inmeeting.ui
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import com.poc.zoom.databinding.LayoutMeetingViewNormalBinding
+import com.poc.zoom.databinding.LayoutMeetingViewShareBinding
 
-class MeetingVideoView @JvmOverloads constructor(
+class MeetingCustomShareVideoView @JvmOverloads constructor(
     context: Context,
     attributeSet: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attributeSet, defStyleAttr) {
 
-    var binding: LayoutMeetingViewNormalBinding
+    var binding: LayoutMeetingViewShareBinding
 
     init {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        binding = LayoutMeetingViewNormalBinding.inflate(inflater, this, true)
+        binding = LayoutMeetingViewShareBinding.inflate(inflater, this, true)
     }
 
 }

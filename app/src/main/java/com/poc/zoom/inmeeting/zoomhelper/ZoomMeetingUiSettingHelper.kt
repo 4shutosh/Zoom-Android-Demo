@@ -1,4 +1,4 @@
-package com.poc.zoom.zoomhelper
+package com.poc.zoom.inmeeting.zoomhelper
 
 import us.zoom.sdk.JoinMeetingOptions
 import us.zoom.sdk.MeetingOptions

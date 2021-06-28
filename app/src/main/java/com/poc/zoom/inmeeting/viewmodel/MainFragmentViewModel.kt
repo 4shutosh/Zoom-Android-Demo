@@ -1,4 +1,4 @@
-package com.poc.zoom.viewmodel
+package com.poc.zoom.inmeeting.viewmodel
 
 import android.content.Context
 import android.util.Log
@@ -6,11 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.poc.zoom.MainFragmentDirections
+import com.poc.zoom.inmeeting.MainFragmentDirections
+import com.poc.zoom.inmeeting.zoomhelper.ZoomMeetingUiSettingHelper
 import com.poc.zoom.utils.ActivityNavigationDispatchers
 import com.poc.zoom.utils.toLiveData
 import com.poc.zoom.viewState.QuestionViewState
-import com.poc.zoom.zoomhelper.ZoomMeetingUiSettingHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import us.zoom.sdk.*
 import java.util.*
@@ -147,6 +147,12 @@ class MainFragmentViewModel @Inject constructor(
                     url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
                 )
             )
+        }
+    }
+
+    fun actionLeaveMeeting() {
+        navigationDispatchers.emit {
+            it.navigateUp()
         }
     }
 

@@ -1,4 +1,4 @@
-package com.poc.zoom.question
+package com.poc.zoom.inmeeting.question
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

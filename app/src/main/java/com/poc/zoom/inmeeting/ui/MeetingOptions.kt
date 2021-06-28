@@ -1,4 +1,4 @@
-package com.poc.zoom.ui
+package com.poc.zoom.inmeeting.ui
 
 import android.content.Context
 import android.util.AttributeSet
@@ -21,16 +21,18 @@ class MeetingOptions @JvmOverloads constructor(
     private lateinit var meetingOptionsChatClickListener: MeetingOptionsChatClickListener
 
     private var zoomSDKInstance: ZoomSDK
-    private val inMeetingAudioController: InMeetingAudioController
-    private val inMeetingVideoController: InMeetingVideoController
+    private lateinit var inMeetingAudioController: InMeetingAudioController
+    private lateinit var inMeetingVideoController: InMeetingVideoController
 
     init {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         binding = LayoutMeetingOptionsBinding.inflate(inflater, this, true)
 
         zoomSDKInstance = ZoomSDK.getInstance()
-        inMeetingAudioController = zoomSDKInstance.inMeetingService.inMeetingAudioController
-        inMeetingVideoController = zoomSDKInstance.inMeetingService.inMeetingVideoController
+        if (zoomSDKInstance.inMeetingService != null) {
+            inMeetingAudioController = zoomSDKInstance.inMeetingService.inMeetingAudioController
+            inMeetingVideoController = zoomSDKInstance.inMeetingService.inMeetingVideoController
+        }
 
         setUpView()
 //        attachListeners()
@@ -56,6 +58,9 @@ class MeetingOptions @JvmOverloads constructor(
             if (this::meetingOptionsChatClickListener.isInitialized) {
                 meetingOptionsChatClickListener.onWebIconClick()
             }
+        }
+        binding.meetingOptionsLeaveMeeting.setOnClickListener {
+            zoomSDKInstance.inMeetingService.leaveCurrentMeeting(false)
         }
     }
 
@@ -87,6 +92,9 @@ class MeetingOptions @JvmOverloads constructor(
         // help check for permissions
         inMeetingVideoController.muteMyVideo(!inMeetingVideoController.isMyVideoMuted)
         binding.meetingOptionsVideo.isActivated = inMeetingVideoController.isMyVideoMuted
+        if (!inMeetingVideoController.isMyVideoMuted) {
+            inMeetingVideoController.rotateMyVideo(0)
+        }
     }
 
     private fun switchChatIcon() {

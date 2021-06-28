@@ -1,13 +1,17 @@
-package com.poc.zoom
+package com.poc.zoom.inmeeting
 
+import android.app.Service
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
@@ -15,21 +19,23 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
-import com.poc.zoom.adapter.ChatAdapter
+import com.poc.zoom.R
 import com.poc.zoom.databinding.FragmentMainBinding
-import com.poc.zoom.ui.MeetingOptionsChatClickListener
-import com.poc.zoom.ui.MeetingVideoView
+import com.poc.zoom.inmeeting.adapter.ChatAdapter
+import com.poc.zoom.inmeeting.ui.MeetingOptionsChatClickListener
+import com.poc.zoom.inmeeting.ui.MeetingVideoView
+import com.poc.zoom.inmeeting.viewmodel.MainFragmentViewModel
+import com.poc.zoom.inmeeting.viewmodel.MainFragmentViewModel.Companion.LAYOUT_TYPE_IN_WAIT_ROOM
+import com.poc.zoom.inmeeting.viewmodel.MainFragmentViewModel.Companion.LAYOUT_TYPE_LIST_VIDEO
+import com.poc.zoom.inmeeting.viewmodel.MainFragmentViewModel.Companion.LAYOUT_TYPE_OTHER_SHARE
+import com.poc.zoom.inmeeting.viewmodel.MainFragmentViewModel.Companion.LAYOUT_TYPE_WAITHOST
+import com.poc.zoom.inmeeting.viewmodel.MainFragmentViewModel.Companion.LAYOUT_TYPE_WEBINAR_ATTENDEE
+import com.poc.zoom.inmeeting.zoomhelper.ZoomMeetingUserCallback
 import com.poc.zoom.utils.AnimationHelper.enterToRight
 import com.poc.zoom.utils.AnimationHelper.exitToLeft
-import com.poc.zoom.utils.BottomAlertDialog
+import com.poc.zoom.utils.PasswordBottomAlertDialog
+import com.poc.zoom.utils.YesNoBottomAlertDialog
 import com.poc.zoom.utils.onRightDrawableClicked
-import com.poc.zoom.viewmodel.MainFragmentViewModel
-import com.poc.zoom.viewmodel.MainFragmentViewModel.Companion.LAYOUT_TYPE_IN_WAIT_ROOM
-import com.poc.zoom.viewmodel.MainFragmentViewModel.Companion.LAYOUT_TYPE_LIST_VIDEO
-import com.poc.zoom.viewmodel.MainFragmentViewModel.Companion.LAYOUT_TYPE_OTHER_SHARE
-import com.poc.zoom.viewmodel.MainFragmentViewModel.Companion.LAYOUT_TYPE_WAITHOST
-import com.poc.zoom.viewmodel.MainFragmentViewModel.Companion.LAYOUT_TYPE_WEBINAR_ATTENDEE
-import com.poc.zoom.zoomhelper.ZoomMeetingUserCallback
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import us.zoom.sdk.*
@@ -84,6 +90,7 @@ class MainFragment : Fragment(R.layout.fragment_main),
         binding.viewModel = this.viewModel
         checkPermissions()
 
+        setUpBackButton()
 
         binding.fragmentMainChatLayout.chatLayoutRecyclerView.adapter = chatAdapter
         chatAdapter.submitList(chatList)
@@ -119,6 +126,35 @@ class MainFragment : Fragment(R.layout.fragment_main),
                 }
             }
         }
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            val exitDialog = YesNoBottomAlertDialog(
+                requireContext(),
+                title = resources.getString(R.string.are_you_sure),
+                body = resources.getString(R.string.exit_meeting),
+                positiveButtonText = resources.getString(R.string.leave)
+            )
+            exitDialog.positiveButton.setOnClickListener {
+                viewModel.actionLeaveMeeting()
+                exitDialog.dismiss()
+                // here false implies: don't end the meeting
+                zoomSDKInstance.inMeetingService.leaveCurrentMeeting(false)
+            }
+            if (exitDialog.isShowing) {
+                exitDialog.dismiss()
+            } else {
+                exitDialog.show()
+            }
+        }
+    }
+
+    private fun setUpBackButton() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressedCallback
+        )
     }
 
     private fun initLiveData() {
@@ -230,7 +266,7 @@ class MainFragment : Fragment(R.layout.fragment_main),
     }
 
     private fun showPasswordDialog(handler: InMeetingEventHandler) {
-        val dialog = BottomAlertDialog(
+        val dialog = PasswordBottomAlertDialog(
             requireContext(),
             "Please Enter Password",
             "Please Enter Password",
@@ -350,6 +386,10 @@ class MainFragment : Fragment(R.layout.fragment_main),
         val currentUserRender = MobileRTCVideoUnitRenderInfo(0, 0, 100, 100)
         val currentUserId = zoomSDKInstance.inMeetingService.myUserID
         currentUserVideoManager.addAttendeeVideoUnit(currentUserId, currentUserRender)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
     }
 
     private fun showActiveVideoLayout() {

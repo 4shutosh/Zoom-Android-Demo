@@ -1,4 +1,4 @@
-package com.poc.zoom.adapter
+package com.poc.zoom.inmeeting.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

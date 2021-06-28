@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.poc.zoom.viewmodel.MainFragmentViewModel" />
+            type="com.poc.zoom.inmeeting.viewmodel.MainFragmentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,7 +37,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <!--        meeting options -->
-        <com.poc.zoom.ui.MeetingOptions
+        <com.poc.zoom.inmeeting.ui.MeetingOptions
             android:id="@+id/fragment_main_meeting_options"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
