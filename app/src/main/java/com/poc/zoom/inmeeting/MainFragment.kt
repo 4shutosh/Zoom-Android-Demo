@@ -1,10 +1,8 @@
 package com.poc.zoom.inmeeting
 
-import android.app.Service
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -107,6 +105,10 @@ class MainFragment : Fragment(R.layout.fragment_main),
 
             override fun onWebIconClick() {
                 viewModel.actionWebIconClick()
+            }
+
+            override fun onLeaveMeetingIconClick() {
+                activity?.onBackPressed()
             }
         }
         binding.fragmentMainMeetingOptions.setChatIconClickListener(chatIconClickListener)
@@ -211,7 +213,11 @@ class MainFragment : Fragment(R.layout.fragment_main),
         Log.d(TAG, "onMeetingStatusChanged: $meeting")
         when (meeting) {
             // handle all cases here
-            MeetingStatus.MEETING_STATUS_INMEETING -> initializeVideoView()
+            MeetingStatus.MEETING_STATUS_INMEETING -> {
+                view?.post {
+                    initializeVideoView()
+                }
+            }
             MeetingStatus.MEETING_STATUS_CONNECTING -> showConnectingView()
             else -> {
             }

@@ -60,7 +60,9 @@ class MeetingOptions @JvmOverloads constructor(
             }
         }
         binding.meetingOptionsLeaveMeeting.setOnClickListener {
-            zoomSDKInstance.inMeetingService.leaveCurrentMeeting(false)
+            if (this::meetingOptionsChatClickListener.isInitialized) {
+                meetingOptionsChatClickListener.onLeaveMeetingIconClick()
+            }
         }
     }
 
@@ -114,4 +116,5 @@ class MeetingOptions @JvmOverloads constructor(
 interface MeetingOptionsChatClickListener {
     fun onChatIconClick()
     fun onWebIconClick()
+    fun onLeaveMeetingIconClick()
 }
