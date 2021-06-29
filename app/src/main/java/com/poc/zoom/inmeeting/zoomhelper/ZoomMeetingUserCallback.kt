@@ -1,5 +1,6 @@
 package com.poc.zoom.inmeeting.zoomhelper
 
+import android.util.Log
 import android.view.SurfaceHolder
 import com.poc.zoom.utils.BaseCallback
 import com.poc.zoom.utils.BaseEvent
@@ -177,18 +178,14 @@ class ZoomMeetingUserCallback : BaseCallback<ZoomMeetingUserCallback.ZoomBaseMee
             }
 
             override fun onHostAskUnMute(userId: Long) {
-                if (userId == zoomSDKInstance.inMeetingService.myUserID) {
-                    for (event in callbacks) {
-                        event.onHostAskMicUnMute()
-                    }
+                for (event in callbacks) {
+                    event.onHostAskMicUnMute()
                 }
             }
 
             override fun onHostAskStartVideo(userId: Long) {
-                if (userId == zoomSDKInstance.inMeetingService.myUserID) {
-                    for (event in callbacks) {
-                        event.onHostAskVideoUnMute()
-                    }
+                for (event in callbacks) {
+                    event.onHostAskVideoUnMute()
                 }
             }
 

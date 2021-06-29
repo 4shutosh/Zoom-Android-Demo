@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.poc.zoom.R
 import com.poc.zoom.inmeeting.MainFragmentDirections
 import com.poc.zoom.inmeeting.zoomhelper.ZoomMeetingUiSettingHelper
 import com.poc.zoom.utils.ActivityNavigationDispatchers
@@ -58,6 +59,18 @@ class MainFragmentViewModel @Inject constructor(
         zoomSDKInstance.meetingSettingsHelper.enable720p(true)
         val options = ZoomMeetingUiSettingHelper.getJoinMeetingOptions()
         meetingService.joinMeetingWithParams(context, params, options)
+        zoomSDKInstance.meetingSettingsHelper.disableShowMeetingNotification(true)
+        zoomSDKInstance.meetingSettingsHelper.setCustomizedNotificationData(
+            CustomizedNotificationData(
+                R.string.app_name,
+                R.string.app_name,
+                R.drawable.ic_baseline_mic_on,
+                R.drawable.ic_baseline_mic_on,
+                R.color.white,
+                R.drawable.ic_baseline_mic_on
+            ),
+            InMeetingNotificationHandle { p0, p1 -> true }
+        )
     }
 
     fun getNewVideoMeetingLayout(): Int {

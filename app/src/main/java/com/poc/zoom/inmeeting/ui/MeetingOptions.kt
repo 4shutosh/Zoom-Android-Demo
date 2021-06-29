@@ -80,7 +80,7 @@ class MeetingOptions @JvmOverloads constructor(
     }
 
     fun updateVideoButton() {
-        binding.meetingOptionsMic.isActivated = inMeetingAudioController.isMyAudioMuted
+        binding.meetingOptionsVideo.isActivated = inMeetingVideoController.isMyVideoMuted
     }
 
     fun switchMic() {
@@ -90,13 +90,21 @@ class MeetingOptions @JvmOverloads constructor(
         }
     }
 
-    fun switchVideo() {
+    private fun switchVideo() {
         // help check for permissions
         inMeetingVideoController.muteMyVideo(!inMeetingVideoController.isMyVideoMuted)
         binding.meetingOptionsVideo.isActivated = inMeetingVideoController.isMyVideoMuted
         if (!inMeetingVideoController.isMyVideoMuted) {
             inMeetingVideoController.rotateMyVideo(0)
         }
+    }
+
+    fun turnCameraOn() {
+        inMeetingVideoController.muteMyVideo(false)
+        if (!inMeetingVideoController.isMyVideoMuted) {
+            inMeetingVideoController.rotateMyVideo(0)
+        }
+        binding.meetingOptionsVideo.isActivated = inMeetingVideoController.isMyVideoMuted
     }
 
     private fun switchChatIcon() {

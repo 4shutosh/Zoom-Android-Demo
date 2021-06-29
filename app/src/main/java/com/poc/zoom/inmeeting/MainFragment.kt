@@ -15,7 +15,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.poc.zoom.R
 import com.poc.zoom.databinding.FragmentMainBinding
@@ -35,7 +34,6 @@ import com.poc.zoom.utils.PasswordBottomAlertDialog
 import com.poc.zoom.utils.YesNoBottomAlertDialog
 import com.poc.zoom.utils.onRightDrawableClicked
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import us.zoom.sdk.*
 import javax.inject.Inject
 
@@ -62,6 +60,8 @@ class MainFragment : Fragment(R.layout.fragment_main),
 
     private val chatAdapter: ChatAdapter by lazy { ChatAdapter() }
     private val chatList = mutableListOf<InMeetingChatMessage>()
+
+    private var userLeave: Boolean = false
 
     // meeting variables
     private var currentVideoLayoutType = -1
@@ -139,6 +139,7 @@ class MainFragment : Fragment(R.layout.fragment_main),
                 positiveButtonText = resources.getString(R.string.leave)
             )
             exitDialog.positiveButton.setOnClickListener {
+                userLeave = true
                 viewModel.actionLeaveMeeting()
                 exitDialog.dismiss()
                 // here false implies: don't end the meeting
@@ -219,9 +220,20 @@ class MainFragment : Fragment(R.layout.fragment_main),
                 }
             }
             MeetingStatus.MEETING_STATUS_CONNECTING -> showConnectingView()
+            MeetingStatus.MEETING_STATUS_DISCONNECTING -> if (!userLeave) viewModel.actionLeaveMeeting()
+            MeetingStatus.MEETING_STATUS_IN_WAITING_ROOM -> showWaitingLayout()
             else -> {
             }
         }
+    }
+
+    private fun showWaitingLayout() {
+        binding.fragmentMainWaitingView.visibility = View.VISIBLE
+        currentVideoLayoutType = LAYOUT_TYPE_IN_WAIT_ROOM
+    }
+
+    private fun hideWaitingLayout() {
+        binding.fragmentMainWaitingView.visibility = View.GONE
     }
 
     override fun onMeetingRequiresPassword(
@@ -250,10 +262,7 @@ class MainFragment : Fragment(R.layout.fragment_main),
     }
 
     override fun onHostAskVideoUnMute() {
-        Log.d(TAG, "onHostAskVideoUnMute: host asking for video")
-        lifecycleScope.launch {
-            binding.fragmentMainMeetingOptions.switchVideo()
-        }
+        binding.fragmentMainMeetingOptions.turnCameraOn()
     }
 
     override fun onReceiveChatMessage(receivedMessage: InMeetingChatMessage) {
@@ -315,6 +324,8 @@ class MainFragment : Fragment(R.layout.fragment_main),
         }
 
     private fun initializeVideoView() {
+        hideWaitingLayout()
+
         binding.fragmentMainMeetingOptions.updateAllViews()
         val videoLayoutType = getNewVideoMeetingLayout()
         Log.d(TAG, "initializeVideoView: found video type $videoLayoutType")

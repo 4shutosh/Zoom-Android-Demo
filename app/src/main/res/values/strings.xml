@@ -8,4 +8,5 @@
     <string name="are_you_sure">Are you sure?</string>
     <string name="leave">Leave</string>
     <string name="cancel">Cancel</string>
+    <string name="waiting_room_text">This is waiting room, \n Coffee?</string>
 </resources>
